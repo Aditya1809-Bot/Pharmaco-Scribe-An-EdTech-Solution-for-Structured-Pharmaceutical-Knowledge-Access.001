@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmaco-Scribe | Pharmacology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Flowchart Styles - Matches Clinical Teal Theme */
+        .flow-step {
+            position: relative;
+            z-index: 10;
+        }
+        .flow-line {
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            width: 2px;
+            height: 32px;
+            background-color: #CCFBF1; /* Teal-100 */
+            transform: translateX(-50%);
+            z-index: 0;
+        }
+        .flow-arrow::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -4px;
+            width: 8px;
+            height: 8px;
+            border-right: 2px solid #CCFBF1;
+            border-bottom: 2px solid #CCFBF1;
+            transform: translateX(-50%) rotate(45deg);
+        }
+        /* Custom scrollbar for text areas */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #CCFBF1; 
+            border-radius: 3px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #14B8A6; 
+        }
+    </style>
+</head>
+<body>
+    <!-- Main App Wrapper -->
+    <div id="app-wrapper" class="flex flex-col min-h-screen">
+        <nav class="navbar">
+            <!-- Navbar is injected by app.js -->
+        </nav>
+
+        <main class="container mx-auto p-4 flex-grow animate-fade-in">
+            <!-- Back Button -->
+            <div class="max-w-6xl mx-auto mb-4 py-4">
+                <a href="curriculum.html" class="inline-flex items-center text-[#0F766E] font-semibold hover:text-[#14B8A6] transition-colors">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Back to Curriculum
+                </a>
+            </div>
+
+            <!-- MAIN VIEW TOGGLE BUTTONS -->
+            <div class="flex justify-center gap-4 mb-8 border-b border-teal-100 pb-6">
+                <button class="main-view-btn active tab-btn px-8 py-3 rounded-full font-bold text-lg" data-target="view-index">
+                    <i class="fa-solid fa-book-open mr-2"></i> Index
+                </button>
+                <button class="main-view-btn tab-btn px-8 py-3 rounded-full font-bold text-lg" data-target="view-moa">
+                    <i class="fa-solid fa-flask mr-2"></i> Mechanism of Action
+                </button>
+            </div>
+
+            <!-- VIEW 1: Pharmacology Index -->
+            <div id="view-index" class="main-view block animate-slide-up">
+                <section class="max-w-4xl mx-auto">
+                    <h1 class="text-4xl font-bold text-[#0F766E] mb-4 text-center">Pharmacology Index</h1>
+                    <p class="text-center text-gray-500 mb-8">Select a reference book and browse the topics.</p>
+
+                    <div class="max-w-md mx-auto mb-10">
+                        <label for="book-selector" class="block text-sm font-medium text-[#0F766E] mb-2">Reference Books:</label>
+                        <select id="book-selector" class="w-full p-3 border bg-white border-teal-100 text-[#0F766E] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14B8A6] transition duration-300"></select>
+                    </div>
+
+                    <div id="index-container" class="space-y-6">
+                        <p class="text-center text-gray-500">Loading index...</p>
+                    </div>
+                </section>
+            </div>
+
+            <!-- VIEW 2: Mechanism of Action -->
+            <div id="view-moa" class="main-view hidden animate-slide-up">
+                <section class="max-w-7xl mx-auto py-4">
+                    <h2 class="text-3xl font-bold text-[#0F766E] mb-6 text-center">Mechanism of Action (MOA)</h2>
+                    <p class="text-center text-gray-500 mb-10 max-w-xl mx-auto">Select a drug to visualize its pharmacological action and clinical profile.</p>
+
+                    <!-- INNER TABS: DRUG SELECTION -->
+                    <div class="mb-10 flex flex-wrap justify-center gap-4">
+                        <button class="drug-tab-btn active tab-btn px-4 py-2 rounded-lg font-bold text-sm shadow-sm" data-drug="pilocarpine">
+                            Pilocarpine (Cholinergic)
+                        </button>
+                        <button class="drug-tab-btn tab-btn px-4 py-2 rounded-lg font-bold text-sm shadow-sm" data-drug="atropine">
+                            Atropine (Anticholinergic)
+                        </button>
+                        <button class="drug-tab-btn tab-btn px-4 py-2 rounded-lg font-bold text-sm shadow-sm" data-drug="adrenaline">
+                            Adrenaline (Adrenergic)
+                        </button>
+                        <button class="drug-tab-btn tab-btn px-4 py-2 rounded-lg font-bold text-sm shadow-sm" data-drug="propranolol">
+                            Propranolol (Beta-Blocker)
+                        </button>
+                    </div>
+
+                    <!-- DISPLAY AREA -->
+                    <div id="moa-display-area" class="bg-white p-8 rounded-3xl shadow-lg border border-teal-100 min-h-[500px] transition-all duration-300">
+                        
+                        <!-- 1. PILOCARPINE CHART -->
+                        <div id="chart-pilocarpine" class="drug-chart block animate-fade-in">
+                            <h3 class="text-2xl font-bold text-[#0F766E] text-center mb-2">Pilocarpine</h3>
+                            <p class="text-center text-gray-500 mb-8 italic">Direct Cholinergic Agonist</p>
+                            
+                            <div class="grid lg:grid-cols-2 gap-12 items-start">
+                                <!-- Flowchart -->
+                                <div class="flex flex-col items-center w-full">
+                                    <h4 class="text-sm font-bold text-gray-400 uppercase mb-4 tracking-widest">Mechanism Diagram</h4>
+                                    
+                                    <!-- Step 1 -->
+                                    <div class="flow-step w-full max-w-md bg-green-50 p-3 rounded-xl border border-green-200 shadow-sm text-center mb-8 relative">
+                                        <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-1 text-green-600"><i class="fa-solid fa-eye-dropper"></i></div>
+                                        <p class="text-[#0F766E] font-bold text-sm">Step 1: Application</p>
+                                        <p class="text-xs text-gray-500">Topical administration to Eye</p>
+                                        <div class="flow-line flow-arrow"></div>
+                                    </div>
+
+                                    <!-- Step 2 -->
+                                    <div class="flow-step w-full max-w-md bg-[#F0FDFA] p-3 rounded-xl border border-teal-200 shadow-sm text-center mb-8 relative">
+                                        <p class="text-[#0F766E] font-bold text-sm">Step 2: Penetration</p>
+                                        <p class="text-xs text-gray-500">Diffuses to Iris Sphincter Muscle</p>
+                                        <div class="flow-line flow-arrow"></div>
+                                    </div>
+
+                                    <!-- Step 3 -->
+                                    <div class="flow-step w-full max-w-md bg-blue-50 p-3 rounded-xl border border-blue-200 shadow-sm text-center mb-8 relative">
+                                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-1 text-blue-600"><i class="fa-solid fa-circle-dot"></i></div>
+                                        <p class="text-[#0F766E] font-bold text-sm">Step 3: Receptor Binding</p>
+                                        <p class="text-xs text-gray-500">Stimulates <strong>M3 Muscarinic Receptors</strong></p>
+                                        <div class="flow-line flow-arrow"></div>
+                                    </div>
+
+                                    <!-- Step 4 -->
+                                    <div class="flow-step w-full max-w-md bg-purple-50 p-3 rounded-xl border border-purple-200 shadow-sm text-center mb-8 relative">
+                                        <p class="text-[#0F766E] font-bold text-sm">Step 4: Signal Transduction</p>
+                                        <p class="text-xs text-gray-500">Activates Gq Protein -> PLC Enzyme</p>
+                                        <div class="flow-line flow-arrow"></div>
+                                    </div>
+
+                                    <!-- Step 5 -->
+                                    <div class="flow-step w-full max-w-md bg-yellow-50 p-3 rounded-xl border border-yellow-200 shadow-sm text-center mb-8 relative">
+                                        <div class="flex justify-center gap-2 mb-1 text-yellow-600 text-xs">
+                                            <span class="font-bold border border-yellow-300 px-1 rounded bg-yellow-100">IP3</span>
+                                            <span class="font-bold border border-yellow-300 px-1 rounded bg-yellow-100">DAG</span>
+                                        </div>
+                                        <p class="text-[#0F766E] font-bold text-sm">Step 5: Ca++ Release</p>
+                                        <p class="text-xs text-gray-500">Intracellular Calcium Surge</p>
+                                        <div class="flow-line flow-arrow"></div>
+                                    </div>
+
+                                    <!-- Result -->
+                                    <div class="flow-step w-full max-w-md bg-[#0F766E] text-white p-4 rounded-xl shadow-lg text-center relative">
+                                        <div class="flex justify-center gap-3 items-center mb-1">
+                                            <i class="fa-solid fa-eye text-xl"></i>
+                                            <i class="fa-solid fa-arrow-right text-sm"></i>
+                                            <i class="fa-solid fa-eye-low-vision text-lg"></i>
+                                        </div>
+                                        <h4 class="text-base font-bold">Step 6: Miosis (Contraction)</h4>
+                                        <p class="text-xs opacity-90">Opens Trabecular Meshwork -> IOP ↓</p>
+                                    </div>
+                                </div>
+
+                                <!-- Clinical Info -->
+                                <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 h-full">
+                                    <h4 class="text-lg font-bold text-[#0F766E] mb-6 border-b border-gray-200 pb-2 flex items-center">
+                                        <i class="fa-solid fa-stethoscope mr-2 text-[#14B8A6]"></i>Clinical Snapshot
+                                    </h4>
+                                    
+                                    <div class="mb-8">
+                                        <span class="text-xs font-bold text-white bg-[#14B8A6] px-2 py-1 rounded mb-2 inline-block">THERAPEUTIC USES</span>
+                                        <ul class="space-y-3 mt-2">
+                                            <li class="flex items-start"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Glaucoma Treatment:</strong> Lowers intraocular pressure in Open-Angle & Angle-Closure Glaucoma.</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Xerostomia:</strong> Treats dry mouth caused by Sjögren’s syndrome.</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Radiation-Induced Dryness:</strong> Stimulates salivary glands after head/neck radiation.</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Miosis Induction:</strong> Constricts pupil rapidly for eye surgeries.</span></li>
+                                        </ul>
+                                    </div>
+
+                                    <div>
+                                        <span class="text-xs font-bold text-white bg-red-500 px-2 py-1 rounded mb-2 inline-block">ADVERSE EFFECTS</span>
+                                        <ul class="space-y-3 mt-2">
+                                            <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-red-400 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Excessive Secretions:</strong> Profuse sweating (diaphoresis) and excessive salivation.</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-red-400 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Ocular Discomfort:</strong> Brow ache, eye pain, and blurred vision.</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-red-400 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>GI Distress:</strong> Diarrhea, nausea, and abdominal cramping.</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-red-400 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Urinary Frequency:</strong> Increased urge due to bladder stimulation.</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. ATROPINE -->
+                        <div id="chart-atropine" class="drug-chart hidden animate-fade-in">
+                            <h3 class="text-2xl font-bold text-[#0F766E] text-center mb-2">Atropine</h3>
+                            <p class="text-center text-gray-500 mb-8 italic">Anticholinergic (The Blocker)</p>
+                            
+                            <div class="grid lg:grid-cols-2 gap-12 items-start">
+                                <!-- Flowchart -->
+                                <div class="flex flex-col items-center w-full">
+                                    <h4 class="text-sm font-bold text-gray-400 uppercase mb-4 tracking-widest">Mechanism Diagram</h4>
+                                    
+                                    <!-- Step 1 -->
+                                    <div class="flow-step w-full max-w-md bg-teal-50 p-3 rounded-xl border border-teal-200 shadow-sm text-center mb-8 relative">
+                                        <p class="text-[#0F766E] font-bold text-sm">Step 1: Introduction</p>
+                                        <p class="text-xs text-gray-500">Atropine administered (IV/IM/Topical)</p>
+                                        <div class="flow-line flow-arrow"></div>
+                                    </div>
+
+                                    <!-- Step 2 -->
+                                    <div class="flow-step w-full max-w-md bg-[#F0FDFA] p-3 rounded-xl border border-teal-200 shadow-sm text-center mb-8 relative">
+                                        <div class="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-1 text-teal-600"><i class="fa-solid fa-brain"></i></div>
+                                        <p class="text-[#0F766E] font-bold text-sm">Step 2: Signal Release</p>
+                                        <p class="text-xs text-gray-500">Body releases <strong>Acetylcholine (ACh)</strong></p>
+                                        <div class="flow-line flow-arrow"></div>
+                                    </div>
+
+                                    <!-- Step 3 (Competition) -->
+                                    <div class="flow-step w-full max-w-md bg-orange-50 p-3 rounded-xl border border-orange-200 shadow-sm text-center mb-8 relative">
+                                        <div class="flex justify-center items-center gap-2 mb-1">
+                                            <span class="text-xs font-bold text-teal-600">ACh</span>
+                                            <i class="fa-solid fa-right-left text-orange-400 text-xs"></i>
+                                            <span class="text-xs font-bold text-red-600">Atropine</span>
+                                        </div>
+                                        <p class="text-[#0F766E] font-bold text-sm">Step 3: Competition</p>
+                                        <p class="text-xs text-gray-500">Both fight for the receptor site</p>
+                                        <div class="flow-line flow-arrow"></div>
+                                    </div>
+
+                                    <!-- Step 4 (Blockade) -->
+                                    <div class="flow-step w-full max-w-md bg-red-50 p-3 rounded-xl border-2 border-red-200 shadow-md text-center mb-8 relative">
+                                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-red-600 text-white w-6 h-6 flex items-center justify-center rounded-full border-2 border-white">
+                                            <i class="fa-solid fa-shield-halved text-xs"></i>
+                                        </div>
+                                        <p class="text-[#0F766E] font-bold text-sm mt-1">Step 4: Receptor Blockade</p>
+                                        <p class="text-xs text-gray-500">Atropine occupies Muscarinic Receptor</p>
+                                        <div class="flow-line flow-arrow"></div>
+                                    </div>
+
+                                    <!-- Step 5 (Failed Signal) -->
+                                    <div class="flow-step w-full max-w-md bg-gray-50 p-3 rounded-xl border border-gray-200 border-dashed text-center mb-8 relative opacity-75">
+                                        <p class="text-[#0F766E] font-bold text-sm">Step 5: No Activation</p>
+                                        <p class="text-gray-400 text-xs font-medium line-through">G-Protein Signaling</p>
+                                        <p class="text-xs text-gray-400">Parasympathetic signal fails</p>
+                                        <div class="flow-line flow-arrow"></div>
+                                    </div>
+
+                                    <!-- Result -->
+                                    <div class="flow-step w-full max-w-md bg-[#0F766E] text-white p-4 rounded-xl shadow-lg text-center relative">
+                                        <div class="flex justify-center gap-4 text-xl mb-1">
+                                            <i class="fa-solid fa-heart-circle-bolt"></i>
+                                            <i class="fa-solid fa-droplet-slash"></i>
+                                        </div>
+                                        <h4 class="text-base font-bold">Step 6: Unchecked Sympathetic Tone</h4>
+                                        <p class="text-xs opacity-90">Heart Rate ↑ | Secretions ↓</p>
+                                    </div>
+                                </div>
+
+                                <!-- Clinical Info -->
+                                <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 h-full">
+                                    <h4 class="text-lg font-bold text-[#0F766E] mb-6 border-b border-gray-200 pb-2 flex items-center">
+                                        <i class="fa-solid fa-stethoscope mr-2 text-[#14B8A6]"></i>Clinical Snapshot
+                                    </h4>
+                                    
+                                    <div class="mb-8">
+                                        <span class="text-xs font-bold text-white bg-[#14B8A6] px-2 py-1 rounded mb-2 inline-block">THERAPEUTIC USES</span>
+                                        <ul class="space-y-3 mt-2">
+                                            <li class="flex items-start"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Bradycardia:</strong> Drug of choice for dangerously slow heart rates.</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Antidote for Poisoning:</strong> Lifesaving for organophosphate and nerve gas poisoning.</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Pre-anesthetic:</strong> Dries respiratory secretions to prevent aspiration.</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Ophthalmology:</strong> Dilates pupils (mydriasis) for exams.</span></li>
+                                        </ul>
+                                    </div>
+
+                                    <div>
+                                        <span class="text-xs font-bold text-white bg-red-500 px-2 py-1 rounded mb-2 inline-block">ADVERSE EFFECTS</span>
+                                        <ul class="space-y-3 mt-2">
+                                            <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-red-400 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Dryness:</strong> Severe dry mouth and dry, hot skin.</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-red-400 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Vision Issues:</strong> Blurred vision and photophobia.</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-red-400 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Urinary Retention:</strong> Difficulty passing urine (esp. elderly men).</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-red-400 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>CNS Effects:</strong> Confusion, hallucinations ("Mad as a hatter").</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 3. ADRENALINE -->
+                        <div id="chart-adrenaline" class="drug-chart hidden animate-fade-in">
+                            <h3 class="text-2xl font-bold text-[#0F766E] text-center mb-2">Adrenaline / Epinephrine</h3>
+                            <p class="text-center text-gray-500 mb-8 italic">Sympathomimetic (Fight or Flight)</p>
+                            
+                            <div class="grid lg:grid-cols-2 gap-12 items-start">
+                                <!-- Flowchart -->
+                                <div class="flex flex-col items-center w-full">
+                                    <h4 class="text-sm font-bold text-gray-400 uppercase mb-4 tracking-widest">Mechanism Diagram</h4>
+                                    <!-- Step 1 -->
+                                    <div class="flow-step w-full max-w-md bg-[#F0FDFA] p-3 rounded-xl border border-teal-200 shadow-sm text-center mb-8 relative">
+                                        <div class="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-1 text-teal-600"><i class="fa-solid fa-bolt"></i></div>
+                                        <p class="text-[#0F766E] font-bold text-sm">Step 1: Release</p>
+                                        <p class="text-xs text-gray-500">Systemic Injection / Secretion</p>
+                                        <div class="flow-line flow-arrow"></div>
+                                    </div>
+
+                                    <!-- Step 2: Distribution -->
+                                    <div class="flow-step w-full max-w-md bg-blue-50 p-3 rounded-xl border border-blue-200 shadow-sm text-center mb-8 relative">
+                                        <p class="text-[#0F766E] font-bold text-sm">Step 2: Distribution</p>
+                                        <p class="text-xs text-gray-500">Circulates to all organs</p>
+                                        <div class="flow-line flow-arrow"></div>
+                                    </div>
+                                    
+                                    <!-- Step 3: Split Pathway -->
+                                    <div class="flex w-full max-w-md justify-between gap-4 mb-8 relative">
+                                        <!-- Alpha -->
+                                        <div class="flex-1 bg-purple-50 p-2 rounded-xl border border-purple-200 text-center">
+                                            <span class="block font-bold text-purple-700 text-sm mb-1">Step 3a: α1</span>
+                                            <span class="text-xs text-gray-500 block">Vessels</span>
+                                            <i class="fa-solid fa-arrow-down text-gray-300 mt-2 text-xs"></i>
+                                            <div class="bg-purple-100 rounded p-1 mt-1 text-xs font-bold text-purple-800">Gq Protein</div>
+                                        </div>
+                                        <!-- Beta -->
+                                        <div class="flex-1 bg-blue-50 p-2 rounded-xl border border-blue-200 text-center">
+                                            <span class="block font-bold text-blue-700 text-sm mb-1">Step 3b: β1/β2</span>
+                                            <span class="text-xs text-gray-500 block">Heart/Lung</span>
+                                            <i class="fa-solid fa-arrow-down text-gray-300 mt-2 text-xs"></i>
+                                            <div class="bg-blue-100 rounded p-1 mt-1 text-xs font-bold text-blue-800">Gs Protein</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Step 4: Second Messengers -->
+                                    <div class="flow-step w-full max-w-md bg-yellow-50 p-3 rounded-xl border border-yellow-200 shadow-sm text-center mb-8 relative">
+                                        <p class="text-[#0F766E] font-bold text-sm">Step 4: Second Messengers</p>
+                                        <div class="flex justify-center gap-4 text-yellow-700 text-xs mt-1">
+                                            <div class="text-center"><i class="fa-solid fa-arrow-up"></i> Ca++ (Alpha)</div>
+                                            <div class="text-center"><i class="fa-solid fa-arrow-up"></i> cAMP (Beta)</div>
+                                        </div>
+                                        <div class="flow-line flow-arrow"></div>
+                                    </div>
+
+                                    <!-- Step 5: Effectors -->
+                                    <div class="flow-step w-full max-w-md bg-orange-50 p-3 rounded-xl border border-orange-200 shadow-sm text-center mb-8 relative">
+                                        <p class="text-[#0F766E] font-bold text-sm">Step 5: Enzyme Activation</p>
+                                        <p class="text-xs text-gray-500">PKA & Myosin Kinase</p>
+                                        <div class="flow-line flow-arrow"></div>
+                                    </div>
+
+                                    <!-- Result -->
+                                    <div class="flow-step w-full max-w-md bg-[#0F766E] text-white p-4 rounded-xl shadow-lg text-center relative">
+                                        <h4 class="text-base font-bold">Step 6: Final Effects</h4>
+                                        <div class="flex justify-around items-center mt-2">
+                                            <div class="text-center">
+                                                <i class="fa-solid fa-heart-pulse text-xl mb-1 block"></i>
+                                                <span class="text-xs font-bold">HR ↑</span>
+                                            </div>
+                                            <div class="text-center">
+                                                <i class="fa-solid fa-lungs text-xl mb-1 block"></i>
+                                                <span class="text-xs font-bold">Open Airway</span>
+                                            </div>
+                                            <div class="text-center">
+                                                <i class="fa-solid fa-gauge-high text-xl mb-1 block"></i>
+                                                <span class="text-xs font-bold">BP ↑</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Clinical Info -->
+                                <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 h-full">
+                                    <h4 class="text-lg font-bold text-[#0F766E] mb-6 border-b border-gray-200 pb-2 flex items-center">
+                                        <i class="fa-solid fa-stethoscope mr-2 text-[#14B8A6]"></i>Clinical Snapshot
+                                    </h4>
+                                    
+                                    <div class="mb-8">
+                                        <span class="text-xs font-bold text-white bg-[#14B8A6] px-2 py-1 rounded mb-2 inline-block">THERAPEUTIC USES</span>
+                                        <ul class="space-y-3 mt-2">
+                                            <li class="flex items-start"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Anaphylactic Shock:</strong> First-line lifesaving drug for severe allergies.</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Cardiac Arrest:</strong> Used during CPR to restore heart rhythm.</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Hemorrhage Control:</strong> Applied topically to stop bleeding.</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Local Anesthesia:</strong> Prolongs numbness and reduces bleeding.</span></li>
+                                        </ul>
+                                    </div>
+
+                                    <div>
+                                        <span class="text-xs font-bold text-white bg-red-500 px-2 py-1 rounded mb-2 inline-block">ADVERSE EFFECTS</span>
+                                        <ul class="space-y-3 mt-2">
+                                            <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-red-400 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Cardiovascular Stress:</strong> Tachycardia, palpitations, arrhythmias.</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-red-400 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Hypertension:</strong> Sharp rise in BP (risk of hemorrhage).</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-red-400 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>CNS Disturbance:</strong> Anxiety, restlessness, and tremors.</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-red-400 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Tissue Necrosis:</strong> If injected incorrectly into digits.</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                         <!-- 4. PROPRANOLOL -->
+                         <div id="chart-propranolol" class="drug-chart hidden animate-fade-in">
+                            <h3 class="text-2xl font-bold text-[#0F766E] text-center mb-2">Propranolol</h3>
+                            <p class="text-center text-gray-500 mb-8 italic">Beta-Blocker (The Brake Pedal)</p>
+                            
+                            <div class="grid lg:grid-cols-2 gap-12 items-start">
+                                <!-- Flowchart -->
+                                <div class="flex flex-col items-center w-full">
+                                    <h4 class="text-sm font-bold text-gray-400 uppercase mb-4 tracking-widest">Mechanism Diagram</h4>
+                                    <!-- Step 1 -->
+                                    <div class="flow-step w-full max-w-md bg-[#F0FDFA] p-3 rounded-xl border border-teal-200 shadow-sm text-center mb-8 relative">
+                                        <div class="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-1 text-teal-600"><i class="fa-solid fa-pills"></i></div>
+                                        <p class="text-[#0F766E] font-bold text-sm">Step 1: Intake</p>
+                                        <p class="text-xs text-gray-500">Propranolol Administered (Oral/IV)</p>
+                                        <div class="flow-line flow-arrow"></div>
+                                    </div>
+
+                                    <!-- Step 2 -->
+                                    <div class="flow-step w-full max-w-md bg-blue-50 p-3 rounded-xl border border-blue-200 shadow-sm text-center mb-8 relative">
+                                        <p class="text-[#0F766E] font-bold text-sm">Step 2: Distribution</p>
+                                        <p class="text-xs text-gray-500">Reaches Heart & Vessels</p>
+                                        <div class="flow-line flow-arrow"></div>
+                                    </div>
+
+                                    <!-- Step 3 (Blockade) -->
+                                    <div class="flow-step w-full max-w-md bg-red-50 p-3 rounded-xl border-2 border-red-200 shadow-md text-center mb-8 relative">
+                                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-red-600 text-white w-6 h-6 flex items-center justify-center rounded-full border-4 border-white">
+                                            <i class="fa-solid fa-shield text-xs"></i>
+                                        </div>
+                                        <p class="text-[#0F766E] font-bold text-sm mt-1">Step 3: Receptor Blockade</p>
+                                        <p class="text-xs text-gray-500">Competitively blocks β1 & β2</p>
+                                        <div class="flow-line flow-arrow"></div>
+                                    </div>
+
+                                    <!-- Step 4 (Prevention) -->
+                                    <div class="flow-step w-full max-w-md bg-orange-50 p-3 rounded-xl border border-orange-200 shadow-sm text-center mb-8 relative">
+                                        <p class="text-[#0F766E] font-bold text-sm">Step 4: Prevention</p>
+                                        <p class="text-xs text-gray-500">Prevents Adrenaline Binding</p>
+                                        <div class="flow-line flow-arrow"></div>
+                                    </div>
+
+                                    <!-- Step 5 (Inhibition) -->
+                                    <div class="flow-step w-full max-w-md bg-gray-50 p-3 rounded-xl border border-gray-200 border-dashed text-center mb-8 relative opacity-75">
+                                        <div class="flex justify-center gap-2 mb-1 text-gray-400 text-xs">
+                                            <i class="fa-solid fa-arrow-trend-down"></i> cAMP levels drop
+                                        </div>
+                                        <p class="text-[#0F766E] font-bold text-sm">Step 5: Gs-Protein Inhibition</p>
+                                        <p class="text-gray-400 text-xs line-through">Calcium Channel Activation</p>
+                                        <div class="flow-line flow-arrow"></div>
+                                    </div>
+
+                                    <!-- Result -->
+                                    <div class="flow-step w-full max-w-md bg-[#0F766E] text-white p-4 rounded-xl shadow-lg text-center relative">
+                                        <h4 class="text-base font-bold">Step 6: Final Effects</h4>
+                                        <div class="flex justify-around items-center mt-1">
+                                            <div class="text-center">
+                                                <i class="fa-solid fa-heart-crack text-xl mb-1 block"></i>
+                                                <span class="text-xs font-bold">HR ↓</span>
+                                            </div>
+                                            <div class="text-center">
+                                                <i class="fa-solid fa-gauge text-xl mb-1 block"></i>
+                                                <span class="text-xs font-bold">BP ↓</span>
+                                            </div>
+                                        </div>
+                                        <p class="text-xs mt-1 opacity-80">(Reduced Cardiac Workload)</p>
+                                    </div>
+                                </div>
+
+                                <!-- Clinical Info -->
+                                <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 h-full">
+                                    <h4 class="text-lg font-bold text-[#0F766E] mb-6 border-b border-gray-200 pb-2 flex items-center">
+                                        <i class="fa-solid fa-stethoscope mr-2 text-[#14B8A6]"></i>Clinical Snapshot
+                                    </h4>
+                                    
+                                    <div class="mb-8">
+                                        <span class="text-xs font-bold text-white bg-[#14B8A6] px-2 py-1 rounded mb-2 inline-block">THERAPEUTIC USES</span>
+                                        <ul class="space-y-3 mt-2">
+                                            <li class="flex items-start"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Hypertension & Angina:</strong> Lowers BP and chest pain by reducing heart workload.</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Migraine Prophylaxis:</strong> Taken daily to prevent migraine attacks.</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Arrhythmias:</strong> Controls irregular heartbeats (e.g., Atrial Fibrillation).</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-check text-teal-500 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Performance Anxiety:</strong> Controls physical symptoms like tremors.</span></li>
+                                        </ul>
+                                    </div>
+
+                                    <div>
+                                        <span class="text-xs font-bold text-white bg-red-500 px-2 py-1 rounded mb-2 inline-block">ADVERSE EFFECTS</span>
+                                        <ul class="space-y-3 mt-2">
+                                            <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-red-400 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Bronchospasm:</strong> Dangerous airway constriction (Avoid in Asthma).</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-red-400 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Bradycardia:</strong> Excessive slowing of heart rate.</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-red-400 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Masking Hypoglycemia:</strong> Hides warning signs of low blood sugar.</span></li>
+                                            <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-red-400 mt-1 mr-2 text-xs"></i><span class="text-sm text-gray-700"><strong>Cold Extremities:</strong> Cold fingers/toes due to reduced blood flow.</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+            </div>
+        </main>
+        
+        <footer class="footer text-gray-500 text-center py-5 mt-auto border-t border-teal-100">
+            <!-- Footer is injected by app.js -->
+        </footer>
+    </div>
+
+    <!-- Topic Content Modal (Existing) -->
+    <div id="topic-modal" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-4xl mx-auto relative border border-teal-100 animate-slide-up max-h-[90vh] overflow-y-auto">
+            <button id="close-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-red-600 transition-colors text-2xl z-10">
+                <i class="fa-solid fa-times-circle"></i>
+            </button>
+            <div id="modal-topic-header">
+                <h1 id="modal-topic-title" class="text-3xl md:text-4xl font-extrabold text-[#0F766E] mb-2"></h1>
+                <p id="modal-topic-book-page" class="text-gray-500 mb-6"></p>
+            </div>
+            <div id="modal-topic-content-container" class="prose max-w-none">
+                <p>Loading content...</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Data scripts should be loaded before app.js -->
+    <script src="pharmacology-data.js"></script>
+    <script src="section-1-data.js"></script>
+    <script src="section-2-data.js"></script>
+    <script src="app.js"></script>
+
+    <!-- Local Script for Tabs -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Function to handle tab switching (Generic)
+            function setupTabs(btnSelector, contentSelector, attributeName) {
+                const btns = document.querySelectorAll(btnSelector);
+                const contents = document.querySelectorAll(contentSelector);
+
+                btns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        // Deactivate all buttons
+                        btns.forEach(b => b.classList.remove('active'));
+                        // Hide all contents
+                        contents.forEach(c => {
+                            c.classList.add('hidden');
+                            c.classList.remove('block');
+                        });
+
+                        // Activate clicked button
+                        btn.classList.add('active');
+                        
+                        // Show target content
+                        const targetId = btn.getAttribute(attributeName);
+                        // Handle generic ID mapping
+                        let finalId = targetId;
+                        if(attributeName === 'data-drug') {
+                            finalId = 'chart-' + targetId;
+                        }
+
+                        const targetContent = document.getElementById(finalId);
+                        if (targetContent) {
+                            targetContent.classList.remove('hidden');
+                            targetContent.classList.add('block');
+                        }
+                    });
+                });
+            }
+
+            // Setup Main View Tabs (Index vs MOA)
+            setupTabs('.main-view-btn', '.main-view', 'data-target');
+
+            // Setup Drug Specific Tabs
+            setupTabs('.drug-tab-btn', '.drug-chart', 'data-drug');
+        });
+    </script>
+</body>
+</html>

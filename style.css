@@ -1,0 +1,218 @@
+/* This file contains the new "Clinical (Teal & Slate)" theme. */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #F0FDFA; /* Mint White Background */
+    color: #334155; /* Slate Text for better readability */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom styles for navigation links to show an active indicator */
+.nav-link.active {
+    color: #0F766E; /* Deep Teal */
+    font-weight: 700;
+}
+.nav-link::after {
+    content: '';
+    background-color: #14B8A6; /* Vibrant Teal Accent */
+    height: 3px;
+    width: 0;
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    border-radius: 9999px;
+    transition: width 0.3s ease;
+}
+.nav-link.active::after, .nav-link:hover::after {
+    width: 100%;
+}
+
+/* Tab button styling for Learn page & Pharmacology Page */
+.tab-btn, .moa-tab-btn, .drug-tab-btn {
+    transition: all 0.3s ease;
+}
+
+.tab-btn.active, .moa-tab-btn.active, .drug-tab-btn.active {
+    background-color: #0F766E; /* Deep Teal */
+    color: #FFFFFF; /* White */
+    box-shadow: 0 4px 6px -1px rgba(15, 118, 110, 0.2), 0 2px 4px -1px rgba(15, 118, 110, 0.1);
+}
+
+.tab-btn:not(.active), .moa-tab-btn:not(.active), .drug-tab-btn:not(.active) {
+    background-color: #CCFBF1; /* Light Teal */
+    color: #0F766E; /* Deep Teal */
+}
+
+.tab-btn:not(.active):hover, .moa-tab-btn:not(.active):hover, .drug-tab-btn:not(.active):hover {
+    background-color: #99F6E4; /* Hover Teal */
+}
+
+
+/* --- Flashcard Animation --- */
+.perspective-1000 { 
+    perspective: 1000px; 
+}
+.flashcard-inner {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    text-align: center;
+    transition: transform 0.7s;
+    transform-style: preserve-3d;
+}
+.flashcard-flipped {
+    transform: rotateY(180deg);
+}
+.flashcard-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    background-color: #FFFFFF; /* White Cards */
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    border: 1px solid #CCFBF1; /* Teal Border */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.flashcard-front { 
+    border-top: 4px solid #14B8A6; /* Vibrant Teal */
+}
+.flashcard-back {
+    border-top: 4px solid #0F766E; /* Deep Teal */
+    transform: rotateY(180deg);
+}
+
+/* --- Quiz Answer Buttons --- */
+.quiz-option.correct, .case-study-option.correct {
+    background-color: #22c55e !important;
+    border-color: #16a34a !important;
+    color: white !important;
+}
+.quiz-option.correct:hover, .case-study-option.correct:hover {
+    background-color: #16a34a !important;
+}
+.quiz-option.incorrect, .case-study-option.incorrect {
+    background-color: #ef4444 !important;
+    border-color: #dc2626 !important;
+    color: white !important;
+}
+.quiz-option.incorrect:hover, .case-study-option.incorrect:hover {
+    background-color: #dc2626 !important;
+}
+
+/* --- Title Word Animation (Homepage) --- */
+.animated-word-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.animated-word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.animated-word.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- Small Circular Progress Bar for History --- */
+@property --progress-value {
+  syntax: '<integer>';
+  initial-value: 0;
+  inherits: false;
+}
+
+.progress-circle-small {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: 
+    radial-gradient(closest-side, white 80%, transparent 81% 100%),
+    conic-gradient(#0F766E calc(var(--value) * 1%), #CCFBF1 0); /* Teal Gradient */
+  animation: progress-animation 1.5s 1 forwards;
+}
+
+.progress-text-small {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0F766E;
+}
+
+@keyframes progress-animation {
+  from { --value: 0; }
+  to { --value: var(--final-value); }
+}
+
+/* --- Flowchart Styles --- */
+.flow-step {
+    position: relative;
+    z-index: 10;
+}
+.flow-line {
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    width: 2px;
+    height: 32px;
+    background-color: #CCFBF1; /* Teal Line */
+    transform: translateX(-50%);
+    z-index: 0;
+}
+.flow-arrow::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -4px;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid #CCFBF1;
+    border-bottom: 2px solid #CCFBF1;
+    transform: translateX(-50%) rotate(45deg);
+}
+
+
+/* --- General Animations --- */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+}
+.animate-slide-up {
+    animation: slideUp 0.6s ease-out forwards;
+}
+
+/* --- LOGO MOTION ANIMATION (New) --- */
+@keyframes logoLiveMotion {
+    0% { transform: translateY(0) rotate(0deg) scale(1); filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
+    25% { transform: translateY(-3px) rotate(-2deg) scale(1.05); filter: drop-shadow(0 8px 12px rgba(20, 184, 166, 0.3)); }
+    50% { transform: translateY(0) rotate(0deg) scale(1); filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
+    75% { transform: translateY(-3px) rotate(2deg) scale(1.05); filter: drop-shadow(0 8px 12px rgba(20, 184, 166, 0.3)); }
+    100% { transform: translateY(0) rotate(0deg) scale(1); filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
+}
+
+.logo-video-effect {
+    animation: logoLiveMotion 4s ease-in-out infinite;
+    /* Optional: Mix blend mode to help hide white backgrounds on light themes, 
+       but background removal tool is best */
+    /* mix-blend-mode: multiply; */ 
+}

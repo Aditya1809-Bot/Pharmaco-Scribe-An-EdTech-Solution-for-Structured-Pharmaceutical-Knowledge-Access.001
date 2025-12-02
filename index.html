@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmaco-Scribe | Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div id="auth-container" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-sm mx-4 relative text-center animate-slide-up border border-teal-100">
+            <div class="flex justify-center items-center gap-4 mb-6">
+                <!-- Using logo-video-effect here too for consistency -->
+                <img src="logo.jpg" alt="Pharmaco-Scribe Logo" class="h-16 w-16 logo-video-effect">
+                <h1 class="text-3xl font-extrabold text-[#0F766E]">Pharmaco-Scribe</h1>
+            </div>
+            <p class="text-gray-500 mb-6">Login to track your progress.</p>
+            <div class="space-y-4">
+                <input type="text" id="username-input" placeholder="Enter your name" class="w-full p-3 border bg-white border-teal-200 text-[#0F766E] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#14B8A6]">
+                <button id="login-btn" class="font-bold py-3 px-8 rounded-full shadow-lg transform transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-4 bg-[#0F766E] hover:bg-[#115E59] text-white focus:ring-[#14B8A6] w-full">Start Learning</button>
+            </div>
+            <p class="text-xs text-gray-400 mt-4">No password needed. Your name is used to save progress.</p>
+        </div>
+    </div>
+
+    <div id="app-wrapper" class="hidden flex flex-col min-h-screen">
+        <nav class="navbar">
+            <!-- Navbar is injected by app.js -->
+        </nav>
+
+        <main class="container mx-auto p-4 flex-grow">
+            <section class="text-center py-12 md:py-20 animate-fade-in">
+                <img src="logo.jpg" alt="Pharmaco-Scribe Logo" class="h-32 w-32 md:h-48 md:w-48 mx-auto mb-8 logo-video-effect">
+                <h1 id="animated-title" class="text-4xl md:text-6xl font-extrabold text-[#0F766E] mb-4 h-24 md:h-32"></h1>
+                <p class="text-lg md:text-xl text-gray-500 mb-8 max-w-3xl mx-auto">Your ultimate digital guide to pharmacy reference books. Search topics, test your knowledge with interactive tools, and track your progress seamlessly.</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="search.html" class="font-bold py-3 px-8 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 bg-[#0F766E] hover:bg-[#115E59] text-white focus:ring-[#14B8A6] flex items-center justify-center">
+                        <i class="fa-solid fa-search mr-2"></i>Start Searching
+                    </a>
+                    <a href="learn.html" class="font-bold py-3 px-8 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 bg-[#CCFBF1] text-[#0F766E] hover:bg-[#99F6E4] focus:ring-teal-200 flex items-center justify-center">
+                        Test Your Knowledge
+                    </a>
+                </div>
+            </section>
+
+            <section class="py-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#0F766E] mb-12 text-center">Why Pharmaco-Scribe?</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    
+                    <!-- LINKED CARD 1: PHARMA CURRICULUM (Moved to First) -->
+                    <a href="curriculum.html" class="block bg-white p-6 rounded-2xl shadow-lg border border-teal-100 text-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer">
+                        <div class="mx-auto mb-4 w-16 h-16 rounded-full flex items-center justify-center text-2xl bg-[#F0FDFA] text-[#14B8A6]">
+                           <i class="fa-solid fa-book-medical"></i>
+                        </div>
+                        <h3 class="font-bold text-xl text-[#0F766E] mb-2">Pharma Curriculum</h3>
+                        <p class="text-gray-500">Explore structured subjects, specialized reference materials, and study guides.</p>
+                    </a>
+
+                    <!-- LINKED CARD 2: SEARCH (Moved to Second) -->
+                    <a href="search.html" class="block bg-white p-6 rounded-2xl shadow-lg border border-teal-100 text-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer">
+                        <div class="mx-auto mb-4 w-16 h-16 rounded-full flex items-center justify-center text-2xl bg-[#F0FDFA] text-[#14B8A6]">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                        <h3 class="font-bold text-xl text-[#0F766E] mb-2">Quick Search</h3>
+                        <p class="text-gray-500">Instantly find detailed information on any drug or topic from trusted reference books.</p>
+                    </a>
+
+                    <!-- LINKED CARD 3: FLASHCARDS (Moved to Third) -->
+                    <a href="learn.html" class="block bg-white p-6 rounded-2xl shadow-lg border border-teal-100 text-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer">
+                        <div class="mx-auto mb-4 w-16 h-16 rounded-full flex items-center justify-center text-2xl bg-[#F0FDFA] text-[#14B8A6]">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                        <h3 class="font-bold text-xl text-[#0F766E] mb-2">Interactive Flashcards</h3>
+                        <p class="text-gray-500">Memorize key facts and mechanisms with our easy-to-use flashcard system.</p>
+                    </a>
+
+                </div>
+            </section>
+        </main>
+        
+        <footer class="footer text-gray-500 text-center py-5 mt-auto border-t border-teal-100">
+             <!-- Footer is injected by app.js -->
+        </footer>
+    </div>
+    
+    <div id="about-us-modal" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-2xl mx-auto relative border border-teal-100 animate-slide-up text-center">
+            <button id="close-about-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-red-600 transition-colors text-2xl">
+                <i class="fa-solid fa-times-circle"></i>
+            </button>
+            <h2 class="text-3xl font-extrabold text-[#0F766E] mb-6">About Us</h2>
+            
+            <div class="text-left space-y-6">
+                <div>
+                    <h3 class="text-xl font-bold text-[#14B8A6] mb-2">Objective</h3>
+                    <p class="text-gray-700 leading-relaxed">
+                        Pharmaco-Scribe is an educational platform created to help students utilize verified and certified reference books through interactive and easy-to-understand materials. Our goal is to transform dense academic content into an engaging learning experience, ensuring students have access to trusted pharmacological knowledge in a simplified format.
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold text-[#14B8A6] mb-2">Authors</h3>
+                    <ul class="text-gray-700 text-lg list-none space-y-1">
+                        <li>ADITYA SUBHASH POL</li>
+                        <li>TEJAS ARUN SHIRSATH</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <p class="text-sm text-gray-500 italic mt-8">
+                        All rights for this website and its content are reserved by the two authors mentioned above.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data scripts should be loaded before app.js -->
+    <script src="pharmacology-data.js"></script>
+    <script src="section-1-data.js"></script>
+    <script src="section-2-data.js"></script>
+    <script src="case-studies-data.js"></script>
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

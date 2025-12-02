@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmaco-Scribe | Pharma Curriculum</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="app-wrapper" class="hidden flex flex-col min-h-screen">
+        <nav class="navbar">
+            <!-- Navbar is injected by app.js -->
+        </nav>
+
+        <main class="container mx-auto p-4 flex-grow animate-fade-in">
+            <section class="py-12">
+                <h1 class="text-4xl font-bold text-[#0F766E] mb-4 text-center">Pharma Curriculum</h1>
+                <p class="text-center text-gray-500 mb-12 max-w-2xl mx-auto">Select a subject to access specialized reference materials, topics, and study guides.</p>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    
+                    <!-- Subject 1: Medicinal Chemistry -->
+                    <div class="group bg-white p-8 rounded-2xl shadow-lg border border-teal-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col items-center text-center relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#0F766E] to-[#14B8A6] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="w-20 h-20 rounded-full bg-[#F0FDFA] flex items-center justify-center text-3xl text-[#0F766E] mb-6 group-hover:bg-[#14B8A6] group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-flask"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-[#0F766E] mb-3">Medicinal Chemistry</h2>
+                        <p class="text-gray-500 mb-6">Study the design, synthesis, and chemical structure of pharmaceutical drugs.</p>
+                        <button onclick="alert('Medicinal Chemistry content is coming soon!')" class="mt-auto font-semibold text-[#14B8A6] group-hover:text-[#0F766E]">View Topics <i class="fa-solid fa-arrow-right ml-2"></i></button>
+                    </div>
+
+                    <!-- Subject 2: Pharmacology (The Active Link) -->
+                    <a href="pharmacology.html" class="group bg-white p-8 rounded-2xl shadow-lg border-2 border-[#14B8A6] hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col items-center text-center relative overflow-hidden">
+                         <div class="absolute top-0 right-0 bg-[#14B8A6] text-white text-xs font-bold px-3 py-1 rounded-bl-lg">Active</div>
+                        <div class="w-20 h-20 rounded-full bg-[#F0FDFA] flex items-center justify-center text-3xl text-[#0F766E] mb-6 group-hover:bg-[#14B8A6] group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-pills"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-[#0F766E] mb-3">Pharmacology</h2>
+                        <p class="text-gray-500 mb-6">Explore drug actions, mechanisms, kinetics, and therapeutic uses.</p>
+                        <span class="mt-auto font-bold text-[#0F766E] bg-[#CCFBF1] py-2 px-6 rounded-full group-hover:bg-[#14B8A6] group-hover:text-white transition-colors">Enter Subject</span>
+                    </a>
+
+                    <!-- Subject 3: Pharmacognosy -->
+                    <div class="group bg-white p-8 rounded-2xl shadow-lg border border-teal-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col items-center text-center relative overflow-hidden">
+                         <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#0F766E] to-[#14B8A6] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="w-20 h-20 rounded-full bg-[#F0FDFA] flex items-center justify-center text-3xl text-[#0F766E] mb-6 group-hover:bg-[#14B8A6] group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-leaf"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-[#0F766E] mb-3">Pharmacognosy</h2>
+                        <p class="text-gray-500 mb-6">Discover drugs derived from natural sources like plants, minerals, and animals.</p>
+                        <button onclick="alert('Pharmacognosy content is coming soon!')" class="mt-auto font-semibold text-[#14B8A6] group-hover:text-[#0F766E]">View Topics <i class="fa-solid fa-arrow-right ml-2"></i></button>
+                    </div>
+
+                    <!-- Subject 4: Industrial Pharmacy -->
+                    <div class="group bg-white p-8 rounded-2xl shadow-lg border border-teal-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col items-center text-center relative overflow-hidden">
+                         <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#0F766E] to-[#14B8A6] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="w-20 h-20 rounded-full bg-[#F0FDFA] flex items-center justify-center text-3xl text-[#0F766E] mb-6 group-hover:bg-[#14B8A6] group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-industry"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-[#0F766E] mb-3">Industrial Pharmacy</h2>
+                        <p class="text-gray-500 mb-6">Learn about drug manufacturing, formulation, technology, and quality control.</p>
+                        <button onclick="alert('Industrial Pharmacy content is coming soon!')" class="mt-auto font-semibold text-[#14B8A6] group-hover:text-[#0F766E]">View Topics <i class="fa-solid fa-arrow-right ml-2"></i></button>
+                    </div>
+
+                    <!-- Subject 5: Pharmacovigilance -->
+                    <div class="group bg-white p-8 rounded-2xl shadow-lg border border-teal-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col items-center text-center relative overflow-hidden md:col-span-2 lg:col-span-1">
+                         <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#0F766E] to-[#14B8A6] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="w-20 h-20 rounded-full bg-[#F0FDFA] flex items-center justify-center text-3xl text-[#0F766E] mb-6 group-hover:bg-[#14B8A6] group-hover:text-white transition-colors">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-[#0F766E] mb-3">Pharmacovigilance</h2>
+                        <p class="text-gray-500 mb-6">Understand drug safety, side effect monitoring, and regulatory reporting.</p>
+                        <button onclick="alert('Pharmacovigilance content is coming soon!')" class="mt-auto font-semibold text-[#14B8A6] group-hover:text-[#0F766E]">View Topics <i class="fa-solid fa-arrow-right ml-2"></i></button>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+        
+        <footer class="footer text-gray-500 text-center py-5 mt-auto border-t border-teal-100">
+             <!-- Footer is injected by app.js -->
+        </footer>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="pharmacology-data.js"></script>
+    <script src="section-1-data.js"></script>
+    <script src="section-2-data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
